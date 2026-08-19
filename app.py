@@ -51,5 +51,18 @@ def editar_refeicao(id_refeicao):
     return jsonify({"message": "Refeição não encontrada"})
 
 
+@app.route("/refeicao/<int:id_refeicao>", methods=['DELETE'])
+def deletar_refeicao(id_refeicao):
+    refeicao = Refeicao.query.get(id_refeicao)
+    
+    if refeicao:
+        db.session.delete(refeicao)
+        db.session.commit()
+        
+        return jsonify({"message": "Refeição deletada com sucesso!"})
+    
+    return jsonify({"message": "Refeição não encontrada"})
+
+
 if __name__ == "__main__":
     app.run(debug=True)
