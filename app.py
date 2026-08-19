@@ -79,6 +79,21 @@ def visualizar_refeicoes():
         })
     
     return jsonify(lista_refeicoes)
+
+
+@app.route("/refeicao/<int:id_refeicao>", methods=['GET'])
+def visualizar_refeicao(id_refeicao):
+    refeicao = Refeicao.query.get(id_refeicao)
+    
+    if refeicao:
+        return jsonify({
+            "nome": refeicao.nome,
+            "description": refeicao.description,
+            "in_diet": refeicao.in_diet,
+            "created_date": refeicao.created_date
+        })
+        
+    return jsonify({"message": "Refeição não encontrada"})
     
 
 if __name__ == "__main__":
