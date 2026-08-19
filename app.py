@@ -63,6 +63,23 @@ def deletar_refeicao(id_refeicao):
     
     return jsonify({"message": "Refeição não encontrada"})
 
+@app.route("/refeicao")
+def visualizar_refeicoes():
+    refeicoes = Refeicao.query.all()
+    
+    lista_refeicoes = []
+    
+    for refeicao in refeicoes:
+        lista_refeicoes.append({
+            "id": refeicao.id,
+            "nome": refeicao.nome,
+            "description": refeicao.description,
+            "created_date": refeicao.created_date,
+            "in_diet": refeicao.in_diet
+        })
+    
+    return jsonify(lista_refeicoes)
+    
 
 if __name__ == "__main__":
     app.run(debug=True)
