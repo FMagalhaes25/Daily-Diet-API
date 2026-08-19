@@ -32,6 +32,23 @@ def criar_refeicao():
         return jsonify({"message": f"Refeição {nome} criada com sucesso"})
     
     return jsonify({"message": "Nome não pode ser nulo"}), 404
+        
+    
+@app.route("/refeicao/<int:id_refeicao>", methods=['PUT'])
+def editar_refeicao(id_refeicao):
+    data = request.json
+    refeicao = Refeicao.query.get(id_refeicao)
+    
+    if refeicao:
+        refeicao.nome = data.get("nome")
+        refeicao.description = data.get("description")
+        refeicao.in_diet = data.get("in_diet")
+        
+        db.session.commit()
+        
+        return jsonify({"message": "Refeição editada com sucesso!"})
+    
+    return jsonify({"message": "Refeição não encontrada"})
 
 
 if __name__ == "__main__":
