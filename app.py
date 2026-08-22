@@ -1,5 +1,6 @@
 import os
 from flask import Flask, request, jsonify
+from models.user import User
 from models.refeicao import Refeicao
 from dotenv import load_dotenv
 from database import db
@@ -95,6 +96,23 @@ def visualizar_refeicao(id_refeicao):
         
     return jsonify({"message": "Refeição não encontrada"})
     
+
+@app.route("/user", methods=['POST'])
+def create_user():
+    data = request.get_json()
+    
+    name = data.get("name")
+    password = data.get("password")
+    
+    if not name or not password:
+        return jsonify({"message": "Nome e senha são obrigatórios"}), 400
+    
+    new_user = User(name=name, password=password)
+    db.session.add(new_user)
+    db.session.commit()
+    
+    return jsonify({"message": "Usuário criado com sucesso!", "user": new_user.to_dict()}), 201
+
 
 if __name__ == "__main__":
     app.run(debug=True)
