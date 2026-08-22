@@ -139,6 +139,17 @@ def create_refeicao(user_id):
     
     return jsonify({"message": "Refeição cadastrada!", "refeicao": nova_refeicao.to_dict()}), 201
 
+@app.route("/user/<int:id_user>/refeicoes", methods=['GET'])
+def refeicao_by_user(id_user):
+    user = db.session.get(User, id_user)
+    
+    if not user:
+        return jsonify({"message": "Não existe este usuário"}), 404
+    
+    refeicoes_list = [refeicao.to_dict() for refeicao in user.refeicoes]
+    
+    return jsonify({"Refeições": refeicoes_list})
+    
 
 if __name__ == "__main__":
     app.run(debug=True)
