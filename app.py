@@ -114,5 +114,31 @@ def create_user():
     return jsonify({"message": "Usuário criado com sucesso!", "user": new_user.to_dict()}), 201
 
 
+@app.route("/user/<int:user_id>/refeicao", methods=['POST'])
+def create_refeicao(user_id):
+    user = db.session.get(User, user_id)
+    
+    if not user:
+        return jsonify({"message": "Usuário não encontrado"}), 404
+        
+    data = request.get_json()
+    nome = data.get("nome")
+    
+    if not nome:
+         return jsonify({"message": "O nome da refeição é obrigatório"}), 400
+         
+    nova_refeicao = Refeicao(
+        nome=nome,
+        description=data.get("description", ""),
+        in_diet=data.get("in_diet", True),
+        user_id=user.id
+    )
+    
+    db.session.add(nova_refeicao)
+    db.session.commit()
+    
+    return jsonify({"message": "Refeição cadastrada!", "refeicao": nova_refeicao.to_dict()}), 201
+
+
 if __name__ == "__main__":
     app.run(debug=True)
