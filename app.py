@@ -15,24 +15,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
 
 db.init_app(app)
 
-
-@app.route("/refeicao", methods=['POST'])
-def criar_refeicao():
-    data = request.json
-    
-    nome = data.get("nome")
-    description = data.get("description")
-    created_date = data.get("created_date")
-    in_diet = data.get("in_diet")
-    
-    
-    if nome:
-        refeicao = Refeicao(nome=nome, description=description, created_date=created_date, in_diet=in_diet)
-        db.session.add(refeicao)
-        db.session.commit()
-        return jsonify({"message": f"Refeição {nome} criada com sucesso"})
-    
-    return jsonify({"message": "Nome não pode ser nulo"}), 404
         
     
 @app.route("/refeicao/<int:id_refeicao>", methods=['PUT'])
